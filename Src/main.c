@@ -37,6 +37,8 @@
 #include "wwdg.h"
 #include "gpio.h"
 #include "stm32l476xx.h"
+#include "string.h"
+
 
 /* Private variables ---------------------------------------------------------*/
 UART_HandleTypeDef huart2;
@@ -69,23 +71,25 @@ int main(void)
 	MX_USART2_UART_Init();
 	MX_WWDG_Init();
 
+
+
 	//HAL_GPIO_WritePin(LD_G_GPIO_Port, LD_G_Pin, GPIO_PIN_SET);
 	int counter = 0;
 	while (1)
 	{
 		//HAL_UART_Transmit(&huart2, start_message, strlen(start_message), 500);
-		if(HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_10) == GPIO_PIN_RESET) // datchik srabotal
+		if((HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_10) == GPIO_PIN_RESET) || (HAL_GPIO_ReadPin(GPIOE, GPIO_PIN_13) == GPIO_PIN_RESET)) // datchik srabotal
 		{
 			if(!started) // startuem
 			{
-				HAL_UART_Transmit(&huart2, start_message, strlen(start_message), 500);
+				HAL_UART_Transmit(&huart2, (uint8_t *)start_message, strlen(start_message), 500);
 				HAL_GPIO_WritePin(LD_G_GPIO_Port, LD_G_Pin, GPIO_PIN_SET);
 				HAL_Delay(7000);
 				started = 1;
 			}
 			else // started (perehodim v stop)
 			{
-				HAL_UART_Transmit(&huart2, stop_message, strlen(stop_message), 500);
+				HAL_UART_Transmit(&huart2, (uint8_t *)stop_message, strlen(stop_message), 500);
 				HAL_GPIO_WritePin(LD_G_GPIO_Port, LD_G_Pin, GPIO_PIN_RESET);
 				HAL_Delay(7000);
 				started = 0;

@@ -33,10 +33,10 @@ endif
 all: vorota_00_03.elf
 
 # Tool invocations
-vorota_00_03.elf: $(OBJS) $(USER_OBJS)
+vorota_00_03.elf: $(OBJS) $(USER_OBJS) ../STM32L476VGTx_FLASH.ld
 	@echo 'Building target: $@'
 	@echo 'Invoking: MCU GCC Linker'
-	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -T"../STM32L476VGTx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -lm -o "vorota_00_03.elf" @"objects.list" $(USER_OBJS) $(LIBS)
+	arm-none-eabi-gcc -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -specs=nosys.specs -specs=nano.specs -T"../STM32L476VGTx_FLASH.ld" -Wl,-Map=output.map -Wl,--gc-sections -o "vorota_00_03.elf" @"objects.list" $(USER_OBJS) $(LIBS) -lm
 	@echo 'Finished building target: $@'
 	@echo ' '
 	$(MAKE) --no-print-directory post-build
